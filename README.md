@@ -1,7 +1,9 @@
 # customer-management-system-2
 RUNNING FRONT-END:
 
-To run the front end, you may have to delete the node modules folder and package-lock.json within the front-end folder first.
+Run 'npm run dev' in the front end folder to see if the front end will run. 
+
+If it doesn't run, you may have to delete the node modules folder and package-lock.json within the front-end folder first.
 
 Then run 'npm i'
 
