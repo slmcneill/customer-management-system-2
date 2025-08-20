@@ -99,8 +99,9 @@ public class CustomerAPI {
     public ResponseEntity<?> putCustomer(
             @RequestBody Customer customer,
             @PathVariable long id) {
-        if (customer.getId()!=id
-                || customer.getName()==null
+        if (customer.getId() == null
+                || customer.getId() != id
+                || customer.getName() == null
                 || customer.getEmail() == null) {
             return ResponseEntity.badRequest().build();
         }
