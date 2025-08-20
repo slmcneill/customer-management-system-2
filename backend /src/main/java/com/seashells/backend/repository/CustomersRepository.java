@@ -9,8 +9,6 @@ import com.seashells.backend.domain.Customer;
 
 @Repository
 public interface CustomersRepository extends CrudRepository<Customer, Long> {
-
-    // Use entity field names
     Optional<Customer> findByEmailAddress(String emailAddress);
 
     Optional<Customer> findByUserName(String user_name);
