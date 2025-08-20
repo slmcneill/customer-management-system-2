@@ -8,47 +8,60 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="CUSTOMERS")
+@Table(name = "customer")
 public class Customer {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	long id;
-	
-	@Column(name="CUSTOMER_NAME")
-	String name;
-	
-	String email;
 
-	String username;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+	@Column(name = "user_name")
+	private String userName;
 
-	public long getId() {
-		return id;
-	}
+    @Column(name = "name", nullable = false)
+    private String name;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    @Column(name = "email_address", nullable = false)
+    private String emailAddress;
 
-	public String getName() {
-		return name;
-	}
+    @Column(name = "password", nullable = false)
+    private String password;
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
-	public String getEmail() {
-		return email;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return emailAddress;
+    }
+
+    public void setEmail(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+	public String getUser_name() {
+		return userName;
 	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
+	public void setUser_name(String user_name) {
+		this.userName = user_name;
+}
 }
