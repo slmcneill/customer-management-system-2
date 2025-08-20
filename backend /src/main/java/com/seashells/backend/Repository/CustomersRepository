@@ -1,8 +1,0 @@
-package com.seashells.backend.Repository;
-import org.springframework.data.repository.CrudRepository;
-import com.webage.domain.Customer;
-public interface CustomersRepository extends CrudRepository<Customer, Long>
-{
-    Optional<User> findByEmail(String email);
-    Optional<User> findByUsername(String username);
-}
