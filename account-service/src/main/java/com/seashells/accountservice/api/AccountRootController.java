@@ -133,9 +133,7 @@ public class AccountRootController {
 
             for (Customer customer : customers) {
                 // match by email, user_name, or name
-                if ((loginRequest.name.equals(customer.getEmail()) ||
-                     loginRequest.name.equals(customer.getUser_name()) ||
-                     loginRequest.name.equals(customer.getName())) &&
+                if ((loginRequest.name.equals(customer.getUser_name())) &&
                         loginRequest.password.equals(customer.getPassword())) {
 
                     org.springframework.security.core.Authentication auth =

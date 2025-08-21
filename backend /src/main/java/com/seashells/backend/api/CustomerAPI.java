@@ -48,7 +48,7 @@ public class CustomerAPI {
     @PostMapping
     public ResponseEntity<?> addCustomer(@RequestBody Customer newCustomer) {
         if ( newCustomer.getName()==null
-                || newCustomer.getEmail() == null) {
+                || newCustomer.getEmail() == null ||  newCustomer.getPassword() == null){
             return ResponseEntity.badRequest().build();
         }
         newCustomer=repo.save(newCustomer);
