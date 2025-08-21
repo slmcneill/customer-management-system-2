@@ -1,7 +1,6 @@
 package com.seashells.accountservice.api;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import com.seashells.accountservice.security.TokenService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +13,13 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/account")
 public class AccountRootController {
-
     private final RestTemplate restTemplate;
+    private final TokenService tokenService;
 
-    // Inject the RestTemplate bean
-    public AccountRootController(RestTemplate restTemplate) {
+    // Inject RestTemplate and TokenService
+    public AccountRootController(RestTemplate restTemplate, TokenService tokenService) {
         this.restTemplate = restTemplate;
+        this.tokenService = tokenService;
     }
 
     // URL of CustomerAPI (adjust host/port as needed)
@@ -59,9 +59,14 @@ public class AccountRootController {
         for (Customer customer : customers) {
             if (customer.getEmail().equals(loginRequest.username) &&
                 customer.getPassword().equals(loginRequest.password)) {
-                // TODO: Replace with real JWT generation
-                String fakeJwt = "FAKE.JWT.TOKEN";
-                return ResponseEntity.ok().body(fakeJwt);
+                // Generate JWT using TokenService
+                // Create a simple Authentication object for TokenService
+                org.springframework.security.core.Authentication auth = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                    loginRequest.username, loginRequest.password,
+                    java.util.Collections.emptyList()
+                );
+                String jwt = tokenService.generateToken(auth);
+                return ResponseEntity.ok().body(jwt);
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -104,16 +109,5 @@ public class AccountRootController {
         public void setName(String name) { this.name = name; }
         public void setEmail(String email) { this.email = email; }
         public void setPassword(String password) { this.password = password; }
-    }
-}
-
-/**
- * ✅ Move Bean creation to a configuration class
- */
-@Configuration
-class AppConfig {
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
     }
 }
