@@ -12,7 +12,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/account/token", "/account/register").permitAll()
+                .requestMatchers("/account", "/account/token", "/account/register").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(basic -> basic.disable())
