@@ -17,31 +17,53 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_name",nullable=true)
+    @Column(name = "user_name", nullable = true, unique = true) // <-- uniqueness added
     @JsonProperty("user_name") 
     private String userName;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email_address", nullable = false)
+    @Column(name = "email_address", nullable = false, unique = true) // <-- uniqueness added
     @JsonProperty("email") 
     private String emailAddress;
 
     @Column(name = "password", nullable = false)
     private String password;
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    // --- Getters and Setters ---
+    public Long getId() { 
+        return id; 
+    }
+    public void setId(Long id) { 
+        this.id = id; 
+    }
 
-    public String getEmail() { return emailAddress; }
-    public void setEmail(String emailAddress) { this.emailAddress = emailAddress; }
+    public String getUserName() { 
+        return userName; 
+    }
+    public void setUserName(String userName) { 
+        this.userName = userName; 
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getName() { 
+        return name; 
+    }
+    public void setName(String name) { 
+        this.name = name; 
+    }
 
-    public String getUser_name() { return userName; }
-    public void setUser_name(String user_name) { this.userName = user_name; }
+    public String getEmailAddress() { 
+        return emailAddress; 
+    }
+    public void setEmailAddress(String emailAddress) { 
+        this.emailAddress = emailAddress; 
+    }
+
+    public String getPassword() { 
+        return password; 
+    }
+    public void setPassword(String password) { 
+        this.password = password; 
+    }
 }
