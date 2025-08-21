@@ -1,29 +1,30 @@
 package com.seashells.accountservice.api;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.context.annotation.Bean;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/account")
 public class AccountRootController {
 
-    // Inject RestTemplate
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+    private final RestTemplate restTemplate;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    // Inject the RestTemplate bean
+    public AccountRootController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     // URL of CustomerAPI (adjust host/port as needed)
     private final String CUSTOMER_API_URL = "http://localhost:8080/api/customers";
+
     @GetMapping
     public String root() {
         return "Account Service is up and running.";
@@ -48,11 +49,17 @@ public class AccountRootController {
         if (loginRequest.username == null || loginRequest.password == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing username or password");
         }
+
         // Call CustomerAPI to get all customers
         Customer[] customers = restTemplate.getForObject(CUSTOMER_API_URL, Customer[].class);
+        if (customers == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Customer service unavailable");
+        }
+
         for (Customer customer : customers) {
-            if (customer.getEmail().equals(loginRequest.username) && customer.getPassword().equals(loginRequest.password)) {
-                // TODO: Generate JWT here
+            if (customer.getEmail().equals(loginRequest.username) &&
+                customer.getPassword().equals(loginRequest.password)) {
+                // TODO: Replace with real JWT generation
                 String fakeJwt = "FAKE.JWT.TOKEN";
                 return ResponseEntity.ok().body(fakeJwt);
             }
@@ -66,8 +73,10 @@ public class AccountRootController {
         if (registerRequest.name == null || registerRequest.email == null || registerRequest.password == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing registration fields");
         }
+
         // Create new customer object
         Customer newCustomer = new Customer(registerRequest.name, registerRequest.email, registerRequest.password);
+
         // Post to CustomerAPI
         ResponseEntity<?> response = restTemplate.postForEntity(CUSTOMER_API_URL, newCustomer, Object.class);
         if (response.getStatusCode().is2xxSuccessful()) {
@@ -95,5 +104,16 @@ public class AccountRootController {
         public void setName(String name) { this.name = name; }
         public void setEmail(String email) { this.email = email; }
         public void setPassword(String password) { this.password = password; }
+    }
+}
+
+/**
+ * ✅ Move Bean creation to a configuration class
+ */
+@Configuration
+class AppConfig {
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
