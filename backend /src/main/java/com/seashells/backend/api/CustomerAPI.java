@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import com.seashells.backend.repository.CustomersRepository;
 // Configure this class to handle mappings for all requests beginning with "/customers:"
 @RestController
 @RequestMapping("/api/customers")
+@CrossOrigin(origins = "*") 
 
 public class CustomerAPI {
        // PART 4: 
@@ -31,24 +33,10 @@ public class CustomerAPI {
         this.repo = repo;
     }
 
-
-
-
-    // PART 5: 
-    //  Create a public method named "getAll" that takes no parameters.
-    //  Have it return an Iterable of Customer objects.
-    //  Add an annotation to have the method respond the GET requests.
     @GetMapping
     public Iterable<Customer> getAll() {
         return repo.findAll();
     }
-
-
-    // PART 9:
-    //  Create a public method named getCustomer returning Optional<Customer>.
-    //  Annotate the method to respond to GET requests for the "/{id}" path.
-    //  The method should take a long parameter named id annotated with @PathVariable.
-    //  Add code to the method to return the value from the repository's findById method.
 
 
     @GetMapping("/{id}")
@@ -56,19 +44,9 @@ public class CustomerAPI {
         return repo.findById(id);
     }
 
-    //  PART 13:
-    //  Create a method called "addCustomer" returning ResponseEntity<?>.
-    //  Annotate the method to respond to POST requests.
-    //  The method should take a parameter of type Customer annotated with @RequestBody.
-    //  Return a ResponseEntity.badRequest().build() if the incoming customer is missing a name or email.
-    //  Otherwise, save the customer to the repository.
-    //  Use ServletUriComponentsBuilder to construct a proper location URI.
-    //  Return a ResponseEntity.created(uri).build()
-
 
     @PostMapping
     public ResponseEntity<?> addCustomer(@RequestBody Customer newCustomer) {
-// Validate input:
         if ( newCustomer.getName()==null
                 || newCustomer.getEmail() == null) {
             return ResponseEntity.badRequest().build();
