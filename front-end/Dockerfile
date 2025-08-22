@@ -24,7 +24,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy built assets from build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 
 # Add this sets permissions in the nginx html directory
 RUN chmod -R a+r /usr/share/nginx/html

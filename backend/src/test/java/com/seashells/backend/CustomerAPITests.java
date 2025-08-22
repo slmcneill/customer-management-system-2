@@ -44,7 +44,7 @@ public class CustomerAPITests {
     public void testPost() {
         Customer customer = new Customer();
         customer.setName("Test");
-        customer.setEmail("test@test.com");
+        customer.setEmailAddress("test@test.com");
     
         URI location = template.postForLocation("/api/customers", customer, Customer.class);
     
@@ -53,7 +53,7 @@ public class CustomerAPITests {
             assertNotNull(savedCustomer, "Saved customer should not be null");
         assertNotNull(savedCustomer.getId(), "Saved customer ID should not be null");
         assertEquals("Test", savedCustomer.getName(), "Customer name should match");
-        assertEquals("test@test.com", savedCustomer.getEmail(), "Customer email should match");
+        assertEquals("test@test.com", savedCustomer.getEmailAddress(), "Customer email should match");
     }
 
 
