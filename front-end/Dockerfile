@@ -12,6 +12,8 @@ COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm ci
 
+RUN npm install
+
 # Copy source code
 COPY . .
 
@@ -31,7 +33,7 @@ RUN chmod -R a+r /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 3000
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
