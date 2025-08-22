@@ -61,7 +61,10 @@ export function post(customer, postopCallback) {
   const myInit = {
     method: 'POST',
     body: JSON.stringify(customer),
-    headers: getHeaders(),
+    headers: {
+      "Content-Type": "application/json",
+  
+    },
     mode: 'cors'
   };
   const postItem = async (url) => {
