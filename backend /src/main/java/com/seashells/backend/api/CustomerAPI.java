@@ -42,7 +42,7 @@ public class CustomerAPI {
     @PostMapping
     public ResponseEntity<?> addCustomer(@RequestBody Customer newCustomer) {
         if (newCustomer.getName() == null
-                || newCustomer.getEmailAddress() == null
+                || newCustomer.getEmail() == null
                 || newCustomer.getPassword() == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -78,7 +78,7 @@ public class CustomerAPI {
         if (customer.getId() == null
                 || customer.getId() != id
                 || customer.getName() == null
-                || customer.getEmailAddress() == null) {
+                || customer.getEmail() == null) {
             return ResponseEntity.badRequest().build();
         }
         repo.save(customer);

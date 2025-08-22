@@ -53,10 +53,10 @@ public class Customer {
         this.name = name; 
     }
 
-    public String getEmailAddress() { 
+    public String getEmail() { 
         return emailAddress; 
     }
-    public void setEmailAddress(String emailAddress) { 
+    public void setEmail(String emailAddress) { 
         this.emailAddress = emailAddress; 
     }
 
