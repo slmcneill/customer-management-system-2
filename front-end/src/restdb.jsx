@@ -19,7 +19,7 @@ export async function getAll(setCustomers) {
   const myInit = {
     method: 'GET',
     mode: 'cors',
-    headers: getHeaders()
+    headers: getHeaders(token)
   };
   const fetchData = async (url) => {
     try {
@@ -170,7 +170,11 @@ export async function getJWTToken(username, password) {
   if (!response.ok) {
     return { "status": "error", "message": "Login failed: " + response.status };
   }
+
+  const data = await response.json(); // parse JSON response
+  token = data.token; // store the token
   return { "status": "success", "message": "Login successful", "token": token };
 }
+
 
 
