@@ -12,8 +12,6 @@ COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm ci
 
-RUN npm install
-
 # Copy source code
 COPY . .
 
@@ -24,7 +22,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy built assets from build stage
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Add this sets permissions in the nginx html directory
 RUN chmod -R a+r /usr/share/nginx/html
@@ -33,7 +31,7 @@ RUN chmod -R a+r /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
-EXPOSE 3000
+EXPOSE 80
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
