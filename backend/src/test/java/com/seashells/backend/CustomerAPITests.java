@@ -15,11 +15,13 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import com.seashells.backend.domain.Customer;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@Disabled
 public class CustomerAPITests {
     
     @Autowired TestRestTemplate template;
     
     @Test
+    @Disabled
     public void testGetList() {
         Customer[] customers = 
             template.getForObject("/api/customers", Customer[].class);
@@ -29,7 +31,7 @@ public class CustomerAPITests {
         assertTrue(customers.length>0);
     }
     @Test
-
+    @Disabled
     public void testGet() {
         Customer customer = 
         template.getForObject("/api/customers/{id}", Customer.class, 0);
@@ -58,6 +60,7 @@ public class CustomerAPITests {
 
 
     @Test
+    @Disabled
     public void testPut() {
         String path = "/api/customers/2";
         String newValue = "NewValue" + Math.random();

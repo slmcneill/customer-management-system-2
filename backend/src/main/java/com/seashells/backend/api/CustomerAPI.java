@@ -35,7 +35,7 @@ public class CustomerAPI {
     }
 
     @GetMapping("/{id}")
-    public Optional<Customer> getCustomer(@PathVariable long id) {
+    public Optional<Customer> getCustomer(@PathVariable("id") long id) {
         return repo.findById(id);
     }
 
@@ -74,7 +74,7 @@ public class CustomerAPI {
     @PutMapping("/{id}")
     public ResponseEntity<?> putCustomer(
             @RequestBody Customer customer,
-            @PathVariable long id) {
+            @PathVariable("id") long id) {
         if (customer.getId() == null
                 || customer.getId() != id
                 || customer.getName() == null
@@ -86,7 +86,7 @@ public class CustomerAPI {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable long id) {
+    public ResponseEntity<?> deleteCustomer(@PathVariable("id") long id) {
         if (!repo.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

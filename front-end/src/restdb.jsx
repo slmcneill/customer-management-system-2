@@ -2,15 +2,23 @@
 const custBaseURL = 'http://localhost:8080/api/customers';
 const authBaseUrl = 'http://localhost:8081/account';
 
-let token = null;
+
+// Use localStorage to persist JWT token
+const TOKEN_KEY = 'jwt_token';
 
 
 /* CUSTOMER REQUESTS */
 
-let getHeaders = (token) => {
+
+function getStoredToken() {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+let getHeaders = () => {
   const myHeaders = new Headers({ "Content-Type": "application/json" });
-  if (token != null && token !== undefined) {
-    myHeaders.append("Authorization", "Bearer " + token);
+  const storedToken = getStoredToken();
+  if (storedToken) {
+    myHeaders.append("Authorization", "Bearer " + storedToken);
   }
   return myHeaders;
 }
@@ -19,7 +27,7 @@ export async function getAll(setCustomers) {
   const myInit = {
     method: 'GET',
     mode: 'cors',
-    headers: getHeaders(token)
+  headers: getHeaders()
   };
   const fetchData = async (url) => {
     try {
@@ -40,7 +48,7 @@ export async function deleteById(id, postopCallback) {
   const myInit = {
     method: 'DELETE',
     mode: 'cors',
-    headers: getHeaders()
+  headers: getHeaders()
   };
   const deleteItem = async (url) => {
     try {
@@ -85,7 +93,7 @@ export function put(customer, postopCallback) {
   const myInit = {
     method: 'PUT',
     body: JSON.stringify(customer),
-    headers: getHeaders(),
+  headers: getHeaders(),
     mode: 'cors'
   };
   const putItem = async (url) => {
@@ -106,7 +114,7 @@ export function lookupCustomerByName(username) {
   var myInit = {
     method: 'POST',
     body: username,
-    headers: getHeaders(),
+  headers: getHeaders(),
     mode: 'cors'
   };
   const lookupCustomer = async (url) => {
@@ -136,7 +144,7 @@ export async function registerUser( username, password, email) {
   var myInit = {
     method: 'POST',
     body: body,
-    headers: getHeaders(),
+  headers: getHeaders(),
     mode: 'cors'
   };
   try {
@@ -166,6 +174,7 @@ export function callTokenService(customer) {
 }
 
 
+
 export async function getJWTToken(username, password) {
   let customer = { "name": username, password };
 
@@ -175,8 +184,14 @@ export async function getJWTToken(username, password) {
   }
 
   const data = await response.json(); // parse JSON response
-  token = data.token; // store the token
-  return { "status": "success", "message": "Login successful", "token": token };
+  // Store token in localStorage
+  localStorage.setItem(TOKEN_KEY, data.token);
+  return { "status": "success", "message": "Login successful", "token": data.token };
+}
+
+// Logout function to remove JWT from localStorage
+export function logout() {
+  localStorage.removeItem(TOKEN_KEY);
 }
 
 
