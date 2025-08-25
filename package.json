@@ -4,5 +4,8 @@
     "eslint": "^9.33.0",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.39.1"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.35.0"
   }
 }
