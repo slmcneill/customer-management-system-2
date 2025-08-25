@@ -8,7 +8,7 @@ driver = webdriver.Chrome()
 driver.get("https://www.selenium.dev/")
 
 # Wait for 10 seconds
-time.sleep(10)
+time.sleep(3000)
 
 # Prompt user to continue
 #input("Press OK to close the browser and quit the program...")
