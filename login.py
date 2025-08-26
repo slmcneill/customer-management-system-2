@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import WebDriverException, TimeoutException
+from selenium.webdriver.common.keys import Keys
 import time
 
 KEEP_BROWSER_OPEN = True
@@ -15,9 +16,10 @@ def pause(seconds=2):
 try:
     driver = webdriver.Chrome()
     driver.get("http://localhost:3000/login")
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(10)
 
     # ---------- LOGIN AS ADMIN ----------
+    pause(3)
     username_field = WebDriverWait(driver, WAIT_TIME).until(
         EC.presence_of_element_located((By.NAME, "username"))
     )
@@ -26,8 +28,10 @@ try:
 
     username_field.send_keys("benny")
     password_field.send_keys("pass456")
+
+    pause(3)
     login_button.click()
-    pause(2)
+
 
     WebDriverWait(driver, WAIT_TIME).until(EC.url_contains("/app"))
     print("✅ Logged in as admin")
@@ -38,6 +42,8 @@ try:
     )
     email_input = driver.find_element(By.NAME, "email")
     password_input = driver.find_element(By.NAME, "password")
+
+    pause(2)
 
     name_input.send_keys("Lucy Heart")
     email_input.send_keys("lucy@example.com")
@@ -55,12 +61,44 @@ try:
     )
     print(" Customer added: Lucy Heart")
 
+    #Logout and Login as new customer
+
+    current_username = "benny"
+    logout_button = WebDriverWait(driver, WAIT_TIME).until(
+        EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(),'{current_username}')]"))
+    )
+    logout_button.click()
+    alert = WebDriverWait(driver, WAIT_TIME).until(EC.alert_is_present())
+    alert.accept()
+    pause(1)
+    print(" Logged out as admin")
+
+    username_field = WebDriverWait(driver, WAIT_TIME).until(
+        EC.presence_of_element_located((By.NAME, "username"))
+    )
+    password_field = driver.find_element(By.NAME, "password")
+    login_button = driver.find_element(By.CSS_SELECTOR, "button")
+
+    username_field.send_keys("lucyheart")  # login username (backend)
+    pause (2)
+
+    password_field.send_keys("pass123")
+
+    pause(2)
+    login_button.click()
+    pause(1)
+
+    WebDriverWait(driver, WAIT_TIME).until(EC.url_contains("/app"))
+    print("Logged in as updated customer")
+
+
+
     # ---------- UPDATE CUSTOMER ----------
     customer_row = WebDriverWait(driver, WAIT_TIME).until(
         EC.element_to_be_clickable((By.XPATH, "//tr[td[contains(text(), 'Lucy Heart')]]"))
     )
     customer_row.click()
-    pause(1)
+    pause(3)
 
     # Update display name
     name_input = WebDriverWait(driver, WAIT_TIME).until(
@@ -69,11 +107,17 @@ try:
     email_input = driver.find_element(By.NAME, "email")
     password_input = driver.find_element(By.NAME, "password")
 
+    pause(3)
+
     name_input.clear()
     name_input.send_keys("Lucy Star")
 
+    pause(3)
+
     email_input.clear()
     email_input.send_keys("lucy.star@example.com")
+
+    pause (3)
 
     # Clear old password before entering new password
     password_input.clear()
@@ -82,8 +126,9 @@ try:
     save_button = WebDriverWait(driver, WAIT_TIME).until(
         EC.element_to_be_clickable((By.XPATH, "//input[@type='button' and @value='Save']"))
     )
-    save_button.click()
     pause(3)
+    save_button.click()
+
 
     WebDriverWait(driver, WAIT_TIME).until_not(
         EC.presence_of_element_located((By.XPATH, "//tr[td[contains(text(), 'Lucy Heart')]]"))
@@ -94,14 +139,14 @@ try:
     print(" Customer updated: Lucy Star")
 
     # ---------- LOGOUT AS ADMIN ----------
-    current_username = "benny"
+    current_username = "lucyheart"
     logout_button = WebDriverWait(driver, WAIT_TIME).until(
         EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(),'{current_username}')]"))
     )
     logout_button.click()
     alert = WebDriverWait(driver, WAIT_TIME).until(EC.alert_is_present())
     alert.accept()
-    pause(2)
+    pause(1)
     print(" Logged out as admin")
 
     # ---------- LOGIN AS UPDATED CUSTOMER ----------
@@ -111,39 +156,18 @@ try:
     password_field = driver.find_element(By.NAME, "password")
     login_button = driver.find_element(By.CSS_SELECTOR, "button")
 
-    username_field.send_keys("Lucy Star")  # login username (backend)
+    username_field.send_keys("lucyheart")  # login username (backend)
+    pause (2)
+
     password_field.send_keys("newpass999")
-    login_button.click()
+
     pause(2)
+    login_button.click()
+    pause(1)
 
     WebDriverWait(driver, WAIT_TIME).until(EC.url_contains("/app"))
     print("Logged in as updated customer")
 
-    # ---------- LOGOUT AS CUSTOMER ----------
-    current_username = "Lucy Star"
-    logout_button = WebDriverWait(driver, WAIT_TIME).until(
-        EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(),'{current_username}')]"))
-    )
-    logout_button.click()
-    alert = WebDriverWait(driver, WAIT_TIME).until(EC.alert_is_present())
-    alert.accept()
-    pause(2)
-    print("Logged out as customer")
-
-    # ---------- LOGIN AGAIN AS ADMIN ----------
-    username_field = WebDriverWait(driver, WAIT_TIME).until(
-        EC.presence_of_element_located((By.NAME, "username"))
-    )
-    password_field = driver.find_element(By.NAME, "password")
-    login_button = driver.find_element(By.CSS_SELECTOR, "button")
-
-    username_field.send_keys("benny")
-    password_field.send_keys("pass456")
-    login_button.click()
-    pause(2)
-
-    WebDriverWait(driver, WAIT_TIME).until(EC.url_contains("/app"))
-    print(" Logged back in as admin")
 
     # ---------- DELETE CUSTOMER ----------
     customer_row = WebDriverWait(driver, WAIT_TIME).until(
@@ -155,24 +179,14 @@ try:
     delete_button = WebDriverWait(driver, WAIT_TIME).until(
         EC.element_to_be_clickable((By.XPATH, "//input[@type='button' and @value='Delete']"))
     )
-    delete_button.click()
     pause(3)
+    delete_button.click()
 
     WebDriverWait(driver, WAIT_TIME).until_not(
         EC.presence_of_element_located((By.XPATH, "//tr[td[contains(text(), 'Lucy Star')]]"))
     )
     print(" Customer deleted: Lucy Star")
 
-    # ---------- FINAL LOGOUT ----------
-    current_username = "benny"
-    logout_button = WebDriverWait(driver, WAIT_TIME).until(
-        EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(),'{current_username}')]"))
-    )
-    logout_button.click()
-    alert = WebDriverWait(driver, WAIT_TIME).until(EC.alert_is_present())
-    alert.accept()
-    pause(2)
-    print("Logged out as admin (final)")
 
     # ---------- CLEANUP ----------
     if KEEP_BROWSER_OPEN:
