@@ -6,9 +6,9 @@ from selenium.common.exceptions import WebDriverException, TimeoutException
 import time
 
 KEEP_BROWSER_OPEN = True
-WAIT_TIME = 20  # max seconds for waits
+WAIT_TIME = 20  # seconds
 
-# Helper pause to slow down execution
+# Helper to slow down actions
 def pause(seconds=2):
     time.sleep(seconds)
 
@@ -41,6 +41,7 @@ try:
 
     name_input.send_keys("Lucy Heart")
     email_input.send_keys("lucy@example.com")
+    password_input.clear()
     password_input.send_keys("pass123")
 
     save_button = WebDriverWait(driver, WAIT_TIME).until(
@@ -61,6 +62,7 @@ try:
     customer_row.click()
     pause(1)
 
+    # Update display name
     name_input = WebDriverWait(driver, WAIT_TIME).until(
         EC.visibility_of_element_located((By.NAME, "name"))
     )
@@ -69,8 +71,11 @@ try:
 
     name_input.clear()
     name_input.send_keys("Lucy Star")
+
     email_input.clear()
     email_input.send_keys("lucy.star@example.com")
+
+    # Clear old password before entering new password
     password_input.clear()
     password_input.send_keys("newpass456")
 
@@ -94,20 +99,19 @@ try:
         EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(),'{current_username}')]"))
     )
     logout_button.click()
-
     alert = WebDriverWait(driver, WAIT_TIME).until(EC.alert_is_present())
     alert.accept()
     pause(2)
     print("✅ Logged out as admin")
 
-    # ---------- LOGIN AS CUSTOMER ----------
+    # ---------- LOGIN AS UPDATED CUSTOMER ----------
     username_field = WebDriverWait(driver, WAIT_TIME).until(
         EC.presence_of_element_located((By.NAME, "username"))
     )
     password_field = driver.find_element(By.NAME, "password")
     login_button = driver.find_element(By.CSS_SELECTOR, "button")
 
-    username_field.send_keys("Lucy Star")
+    username_field.send_keys("lucy")  # login username (backend)
     password_field.send_keys("newpass456")
     login_button.click()
     pause(2)
@@ -121,7 +125,6 @@ try:
         EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(),'{current_username}')]"))
     )
     logout_button.click()
-
     alert = WebDriverWait(driver, WAIT_TIME).until(EC.alert_is_present())
     alert.accept()
     pause(2)
@@ -166,7 +169,6 @@ try:
         EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(),'{current_username}')]"))
     )
     logout_button.click()
-
     alert = WebDriverWait(driver, WAIT_TIME).until(EC.alert_is_present())
     alert.accept()
     pause(2)
